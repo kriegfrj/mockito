@@ -2,20 +2,16 @@
  * Copyright (c) 2016 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.junit;
+package org.mockito.verification;
 
-import org.junit.rules.TestRule;
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoAssertionError;
 
 /**
- * Use this rule in order to collect multiple verification failures and report at once.
- * This new API in incubating - let us know if you find this feature useful.
- * Should it be turned on by default with Mockito JUnit Rule?
- * <p>
- * Although {@code VerificationCollector} is a JUnit Rule, it does not necessarily have to be used as a Test Rule
- * - see {@link #collectAndReport()}.
- * <p>
+ * Use this interface in order to collect multiple verification failures and report at once.
+ * 
+ * Note that the collector can also be used as a JUnit rule - see {@link org.mockito.junit.VerificationCollectorRule}.
+ *
  * In the example below, the verification failure thrown by {@code byteReturningMethod()} does not block
  * verifying against the {@code simpleMethod()}. After the test is run, a report is generated stating all
  * collect verification failures.
@@ -38,7 +34,7 @@ import org.mockito.exceptions.base.MockitoAssertionError;
  * @since 2.1.0
  */
 @Incubating
-public interface VerificationCollector extends TestRule {
+public interface VerificationCollector {
 
     /**
      * Collect all lazily verified behaviour. If there were failed verifications, it will
@@ -71,7 +67,7 @@ public interface VerificationCollector extends TestRule {
      * @since 2.1.0
      */
     @Incubating
-    void collectAndReport() throws MockitoAssertionError;
+    void report() throws MockitoAssertionError;
 
     /**
      * Enforce all verifications are performed lazily. This method is automatically called when
@@ -98,4 +94,7 @@ public interface VerificationCollector extends TestRule {
      */
     @Incubating
     VerificationCollector assertLazily();
+    
+    @Incubating
+    void collectError(Throwable t);
 }

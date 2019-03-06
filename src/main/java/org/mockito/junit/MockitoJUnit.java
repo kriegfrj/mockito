@@ -4,11 +4,14 @@
  */
 package org.mockito.junit;
 
+import org.junit.rules.TestRule;
 import org.mockito.Incubating;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.junit.JUnitRule;
-import org.mockito.internal.junit.VerificationCollectorImpl;
+import org.mockito.internal.junit.VerificationCollectorRuleImpl;
+import org.mockito.internal.verification.VerificationCollectorImpl;
 import org.mockito.quality.Strictness;
+import org.mockito.verification.VerificationCollector;
 
 /**
  * Mockito supports JUnit via:
@@ -36,10 +39,15 @@ public class MockitoJUnit {
     /**
      * Creates a rule instance that can perform lazy verifications.
      *
-     * @see VerificationCollector
+     * @see VerificationCollectorRule
      * @return the rule instance
      * @since 2.1.0
      */
+    @Incubating
+    public static TestRule ruleOf(VerificationCollector collector) {
+        return new VerificationCollectorRuleImpl(collector);
+    }
+    
     @Incubating
     public static VerificationCollector collector() {
         return new VerificationCollectorImpl();
